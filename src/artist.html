@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Groupie Tracker</title>
+</head>
+
+<body>
+    <center><h1>Artist</h1></center>
+    <form action="/ascii-art" method="post" required>
+        <textarea name="text" cols="100" rows="20" required>{{.Text}}</textarea>
+        <br><br>
+        <select name="banner" id="">
+            <option value="standard.txt">standard</option>
+            <option value="shadow.txt">shadow</option>
+            <option value="thinkertoy.txt">thinkertoy</option>
+        </select>
+        <input type="submit" value="Submit">
+    </form>
+    <hr>
+
+</body>
+
+</html>

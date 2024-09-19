@@ -1,8 +1,0 @@
-package server
-
-
-
-
-func ghandler(){
-
-}
