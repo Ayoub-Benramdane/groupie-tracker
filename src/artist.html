@@ -7,19 +7,43 @@
 </head>
 
 <body>
-    <center><h1>Artist</h1></center>
-    <form action="/ascii-art" method="post" required>
-        <textarea name="text" cols="100" rows="20" required>{{.Text}}</textarea>
-        <br><br>
-        <select name="banner" id="">
-            <option value="standard.txt">standard</option>
-            <option value="shadow.txt">shadow</option>
-            <option value="thinkertoy.txt">thinkertoy</option>
-        </select>
-        <input type="submit" value="Submit">
-    </form>
-    <hr>
-
+    <div class="container">
+        <img src="{{.artists.Image}}" class="img" alt="Artist Image">
+        <table >
+            <tr>
+                <th>Name</th>
+                <td>{{.artists.Name}}</td>
+            </tr>
+            <tr>
+                <th>Members</th>
+                <td>{{ range .artists.Members }}{{.}} <br> {{end}}</td>
+            </tr>
+            <tr>
+                <th>Creation Date</th>
+                <td>{{.artists.CreationDate}}</td>
+            </tr>
+            <tr>
+                <th>First Album</th>
+                <td>{{.artists.FirstAlbum}}</td>
+            </tr>
+            <tr>
+                <th>Locations</th>
+                <td>{{ range .artists.Location }}{{.}} <br> {{end}}</td>
+            </tr>
+            <tr>
+                <th>Concert Dates</th>
+                <td>{{ range .artists.Date }}{{.}} <br> {{end}}</td>
+            </tr>
+            <tr>
+                <th>Relations</th>
+                <td>{{ range $key, $values := .artists.Relation }} {{$key}}: {{ range $values }} {{.}}
+                    <br> {{end}}
+                    <br> {{end}}
+                </td>
+            </tr>
+        </table>
+        <a href="/" class="button">Home Page</a>
+    </div>
 </body>
 
 </html>
