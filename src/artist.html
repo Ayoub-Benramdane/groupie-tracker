@@ -4,46 +4,123 @@
 <head>
     <meta charset="UTF-8">
     <title>Groupie Tracker</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: rgba(9, 12, 12, 0.849);
+        }
+
+        header {
+            color: rgb(0, 255, 42);
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: nowrap;
+            width: 90%;
+            margin: 2% 5%;
+        }
+
+        .img {
+            display: block;
+            width: 300px;
+            height: 300px;
+            border: 1px solid black;
+            background: linear-gradient(red, black, white, green);
+            padding: 30px;
+            margin: 15%;
+            border-radius: 100%;
+        }
+        
+        .artist {
+            width: 500px;
+            color: rgb(0, 255, 42);
+        }
+
+        table {
+            width: 70%;
+            border-collapse: collapse;
+            background: linear-gradient(rgb(27, 27, 27), rgb(65, 63, 63));
+            color: rgb(146, 144, 144);
+            margin: 20px 0;
+        }
+
+        th {
+            color: rgb(255, 235, 235);
+        }
+
+        th,
+        td {
+            border: 2px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #9a03ff;
+            text-decoration: none;
+            background-color: #bdbdbd;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .button:hover {
+            background: linear-gradient(red, black, white, green);
+            color: #020202;
+            text-shadow: -5px -5px 10px white;
+        }
+    </style>
 </head>
 
 <body>
     <div class="container">
-        <img src="{{.artists.Image}}" class="img" alt="Artist Image">
-        <table >
+        <div class="artist">
+            <center>
+                <img src="{{.Image}}" class="img" alt="Artist Image">
+                <h1>{{.Name}}</h1>
+            </center>
+        </div>
+        <table>
             <tr>
                 <th>Name</th>
-                <td>{{.artists.Name}}</td>
+                <td>{{.Name}}</td>
             </tr>
             <tr>
                 <th>Members</th>
-                <td>{{ range .artists.Members }}{{.}} <br> {{end}}</td>
+                <td>{{range .Members}}{{.}}<br>{{end}}</td>
             </tr>
             <tr>
                 <th>Creation Date</th>
-                <td>{{.artists.CreationDate}}</td>
+                <td>{{.CreationDate}}</td>
             </tr>
             <tr>
                 <th>First Album</th>
-                <td>{{.artists.FirstAlbum}}</td>
+                <td>{{.FirstAlbum}}</td>
             </tr>
             <tr>
                 <th>Locations</th>
-                <td>{{ range .artists.Location }}{{.}} <br> {{end}}</td>
+                <td>{{range .Location.Loca}}{{.}}<br>{{end}}</td>
             </tr>
             <tr>
                 <th>Concert Dates</th>
-                <td>{{ range .artists.Date }}{{.}} <br> {{end}}</td>
+                <td>{{range .Date.Dates}}{{.}}<br>{{end}}</td>
             </tr>
             <tr>
                 <th>Relations</th>
-                <td>{{ range $key, $values := .artists.Relation }} {{$key}}: {{ range $values }} {{.}}
-                    <br> {{end}}
-                    <br> {{end}}
+                <td>
+                    {{range $key, $values := .Relation.DatesLocations}}
+                    {{$key}}:<br>
+                    {{range $values}}{{.}}<br>{{end}}
+                    <br>
+                    {{end}}
                 </td>
             </tr>
         </table>
-        <a href="/" class="button">Home Page</a>
     </div>
+    <center><a href="/" class="button">Home Page</a></center>
 </body>
 
 </html>

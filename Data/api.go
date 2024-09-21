@@ -92,9 +92,9 @@ func Artist(id int) artists {
 func Artists() []artists {
 	var wg sync.WaitGroup
 	result := make([]artists, 52)
-	for i := 1; i <= 52; i++ {
+	for i := 0; i < len(result); i++ {
 		wg.Add(1)
-		go fetchAll(i, &wg, &result[i-1], "artists")
+		go fetchAll(i+1, &wg, &result[i], "artists")
 	}
 
 	wg.Wait()

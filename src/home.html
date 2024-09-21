@@ -6,11 +6,13 @@
     <title>Groupie Tracker</title>
     <style>
         body {
-            background: rgba(38, 39, 39, 0.8);
+            margin: 0;
+            padding: 0;
+            background: rgba(9, 12, 12, 0.849);
         }
 
         header {
-            color: rgba(0, 255, 42, 0.8);
+            color: rgb(0, 255, 42);
         }
 
         .container {
@@ -20,9 +22,12 @@
         }
 
         .card {
+            border: 1px solid black;
+            background: linear-gradient(red, black,white, green);
+            padding: 30px;
             width: 350px;
             height: 350px;
-            margin: 35px;
+            margin: 25px;
             display: flex;
             flex-wrap: flex;
             justify-content: center;
@@ -35,12 +40,17 @@
         }
 
         .card div {
-            margin-top: 70px;
-            margin-left: 55px;
+            margin-top: 10px;
+            background-color: rgb(255, 255, 255);
             color: rgb(15, 14, 14);
-            border-radius: 100%;
-            width: 300px;
-            height: 300px;
+            font-weight: 800;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10%;
+            font-size: 13px;
+            width: 250px;
+            height: 250px;
         }
 
         .card img {
@@ -48,15 +58,11 @@
             border-radius: 100%;
             width: 350px;
             height: 350px;
+            opacity: 100%;
         }
 
         .card img:hover {
-            opacity: 30%;
-            position:sticky;
-        }
-
-        .card div:hover {
-            position: absolute;
+            opacity: 20%;
         }
     </style>
 </head>

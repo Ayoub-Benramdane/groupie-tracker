@@ -8,7 +8,13 @@ import (
 
 func Index(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
-		http.Error(w, "Status Not Found 404", http.StatusNotFound)
+		temp, err := template.ParseFiles("src/Error.html")
+		if err != nil {
+			w.WriteHeader(500)
+			return
+		}
+		w.WriteHeader(404)
+		temp.Execute(w, nil)
 		return
 	} else if r.Method != http.MethodGet {
 		http.Error(w, "Status Method Not Allowed 405", http.StatusMethodNotAllowed)
@@ -19,11 +25,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Status Internal Server Error 500", http.StatusInternalServerError)
 		return
 	}
-	err = temp.Execute(w, Artists())
-	if err != nil {
-		http.Error(w, "Status Internal Server Error 500", http.StatusInternalServerError)
-		return
-	}
+	temp.Execute(w, Artists())
 }
 
 func Groupie(w http.ResponseWriter, r *http.Request) {
@@ -37,13 +39,15 @@ func Groupie(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	id, err := strconv.Atoi(r.PathValue("id"))
-	if err != nil || id < 1 || id > 52 {
-		http.Error(w, "Status Internal Server Error 500", http.StatusInternalServerError)
+	if err != nil || (Artist(id).Name) == "" {
+		temp, err := template.ParseFiles("src/Error.html")
+		if err != nil {
+			w.WriteHeader(500)
+			return
+		}
+		w.WriteHeader(404)
+		temp.Execute(w, nil)
 		return
 	}
-	err = temp.Execute(w, Artist(id-1))
-	if err != nil {
-		http.Error(w, "Status Internal Server Error 500", http.StatusInternalServerError)
-		return
-	}
+	temp.Execute(w, Artist(id))
 }
