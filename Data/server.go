@@ -10,7 +10,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
 		temp, err := template.ParseFiles("src/Error.html")
 		if err != nil {
-			w.WriteHeader(500)
+			http.Error(w, "Status Internal Server Error 500", http.StatusInternalServerError)
 			return
 		}
 		w.WriteHeader(404)
@@ -42,7 +42,7 @@ func Groupie(w http.ResponseWriter, r *http.Request) {
 	if err != nil || (Artist(id).Name) == "" {
 		temp, err := template.ParseFiles("src/Error.html")
 		if err != nil {
-			w.WriteHeader(500)
+			http.Error(w, "Status Internal Server Error 500", http.StatusInternalServerError)
 			return
 		}
 		w.WriteHeader(404)
