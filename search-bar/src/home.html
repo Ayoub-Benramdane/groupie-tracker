@@ -11,8 +11,17 @@
             background: rgba(9, 12, 12, 0.849);
         }
 
-        header {
+        .title {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(rgb(29, 28, 28), rgb(127, 128, 127));
             color: rgb(0, 255, 42);
+            text-align: center;
+            height: 150px;
+        }
+
+        .title h1 {
+            padding: 2% 0;
         }
 
         .container {
@@ -65,31 +74,49 @@
             opacity: 20%;
         }
 
-        .is {
+        .search-box {
+            text-align: center;
+            margin: 1%;
+        }
+
+        .search {
             width: 400px;
             height: 30px;
         }
 
-        .bs {
-            height: 36px;
+        #bs {
+            height: 30px;
             cursor: pointer;
         }
     </style>
 </head>
 
 <body>
+    <div class="title">
+        <h1>Groupie Tracker</h1>
+    </div>
     <header>
-        <h1>
-            <center>Groupie Tracker</center>
-        </h1>
-    </header>
-    <form style="margin: 50px;" action="/search">
-        <center>
-            <input class="is" type="text" name="text" placeholder="Search">
-            <input class="bs" type="submit" value="Search">
-        </center>
-    </form>
+        <div class="search-box">
+            <form action="/" method="get">
+                <input type="search" list="search" class="search" name="search" placeholder="Search ..."/>
+                <datalist id="search">
+                    {{range .}}
+                    <option value="{{.Name}}">Artist</option>
+                    {{range .Members}}
+                    <option value="{{.}}">Member</option>
+                    {{end}}
+                    <option value="{{.CreationDate}}">Creation Date</option>
+                    <option value="{{.FirstAlbum}}">First Album</option>
 
+                    {{range .Location.Loca}}
+                    <option value="{{.}}">Location</option>
+                    {{end}}
+                    {{end}}
+                </datalist>
+                <button type="submit" id="bs">Search</button>
+            </form>
+        </div>
+    </header>
     <div class="container">
         {{range .}}
         <a href="/artists/{{.ID}}" class="card">

@@ -85,45 +85,32 @@ func Artist(id int) artists {
 	dataTypes := []string{"artists", "locations", "dates", "relation"}
 	for _, fetch := range dataTypes {
 		wg.Add(1)
-		fetchAll(id, &wg, &result, fetch)
+		go fetchAll(id, &wg, &result, fetch)
 	}
 	wg.Wait()
 	return result
 }
 
-func List(w http.ResponseWriter, r *http.Request) []artists {
+func List(src string) []artists {
 	result := make([]artists, 0)
-	if err := r.ParseForm(); err != nil {
-		http.Error(w, "Status Bad Request 400", http.StatusBadRequest)
-		return nil
-	}
-	src := r.Form.Get("text")
-	date, err := strconv.Atoi(src)
-	if err == nil {
-		for _, c := range Artists() {
-			if c.CreationDate == date {
-				result = append(result, c)
-			}
-		}
-	} else {
-		for _, c := range Artists() {
-			if strings.Contains(c.Name, src) || strings.Contains(c.FirstAlbum, src) {
-				result = append(result, c)
-			} else {
-				isValid := true
-				for _, v := range c.Members {
-					if strings.Contains(v, src) {
-						result = append(result, c)
-						isValid = false
-						break
-					}
+	date, _ := strconv.Atoi(src)
+	for _, c := range Artists() {
+		if c.CreationDate == date || strings.Contains(strings.ToLower(c.Name), src) || strings.Contains(c.FirstAlbum, src) {
+			result = append(result, c)
+		} else {
+			isValid := true
+			for _, v := range c.Members {
+				if strings.Contains(strings.ToLower(v), src) {
+					result = append(result, c)
+					isValid = false
+					break
 				}
-				if isValid {
-					for _, v := range c.Location.Loca {
-						if strings.Contains(v, src) {
-							result = append(result, c)
-							break
-						}
+			}
+			if isValid {
+				for _, v := range c.Location.Loca {
+					if strings.Contains(strings.ToLower(v), src) {
+						result = append(result, c)
+						break
 					}
 				}
 			}

@@ -4,6 +4,7 @@ import (
 	"html/template"
 	"net/http"
 	"strconv"
+	"strings"
 )
 
 func Index(w http.ResponseWriter, r *http.Request) {
@@ -25,7 +26,12 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Status Internal Server Error 500", http.StatusInternalServerError)
 		return
 	}
-	temp.Execute(w, Artists())
+	src := strings.ToLower(r.FormValue("search"))
+	if src != "" {
+		temp.Execute(w, List(src))
+	} else {
+		temp.Execute(w, Artists())
+	}
 }
 
 func Groupie(w http.ResponseWriter, r *http.Request) {
@@ -50,17 +56,4 @@ func Groupie(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	temp.Execute(w, Artist(id))
-}
-
-func Search(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		http.Error(w, "Status Method Not Allowed 405", http.StatusMethodNotAllowed)
-		return
-	}
-	temp, err := template.ParseFiles("src/list.html")
-	if err != nil {
-		http.Error(w, "Status Internal Server Error 500", http.StatusInternalServerError)
-		return
-	}
-	temp.Execute(w, List(w, r))
 }
