@@ -110,7 +110,14 @@
 
 @media (max-width:600px) {
     .home .search {
-        width: 300px;
+        width: 200px;
+    }
+    .home #bs {
+        width: 60px;
+    }
+    .home .title {
+        font-size: 10px;
+        height: 50px;
     }
 }
 

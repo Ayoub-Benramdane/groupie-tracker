@@ -14,7 +14,7 @@
     <header>
         <div class="search-box">
             <form action="/" method="get">
-                <input type="search" list="search" class="search" name="search" placeholder="Search ..." />
+                <input type="search" list="search" class="search" name="search" placeholder="Search ..." autocomplete="off"/>
                 <datalist id="search">
                     {{range .}}
                     <option value="{{.Name}}">Artist</option>
