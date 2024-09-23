@@ -1,0 +1,208 @@
+/* Home Page */
+
+.home {
+    margin: 0;
+    padding: 0;
+    background: rgba(9, 12, 12, 0.849);
+}
+
+.home .title {
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(rgb(29, 28, 28), rgb(127, 128, 127));
+    color: rgb(0, 255, 42);
+    text-align: center;
+    height: 150px;
+}
+
+.home .title h1 {
+    padding: 2% 0;
+}
+
+.home .container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.home .card {
+    border: 1px solid black;
+    background: linear-gradient(red, black, white, green);
+    padding: 30px;
+    width: 350px;
+    height: 350px;
+    margin: 25px;
+    display: flex;
+    flex-wrap: flex;
+    justify-content: center;
+    border-radius: 100%;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.home .card div {
+    margin-top: 10px;
+    background-color: rgb(255, 255, 255);
+    color: rgb(15, 14, 14);
+    font-weight: 800;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10%;
+    font-size: 13px;
+    width: 250px;
+    height: 250px;
+}
+
+.home .card img {
+    position: absolute;
+    border-radius: 100%;
+    width: 350px;
+    height: 350px;
+    opacity: 100%;
+}
+
+.home .card img:hover {
+    opacity: 20%;
+}
+
+.home .search-box {
+    text-align: center;
+    margin: 1%;
+}
+
+.home .search {
+    width: 400px;
+    height: 35px;
+    padding: 15px;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 20px 0 0 20px;
+    background-color: #2E3131;
+    color: #333;
+}
+
+.home .search:focus {
+    border-color: #f0f0f0;
+    outline: none;
+    color: white;
+    background-color: #2E3131;
+}
+
+.home #bs {
+    margin-left: -4px;
+    margin-top: 10px;
+    height: 35px;
+    width: 90px;
+    border-radius: 0 20px 20px 0;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.home #bs:hover {
+    background-color: #0056b3;
+}
+
+@media (max-width:600px) {
+    .home .search {
+        width: 300px;
+    }
+}
+
+/* Artist Page */
+
+.art {
+    margin: 0;
+    padding: 0;
+    background: rgba(9, 12, 12, 0.849);
+}
+
+.art header {
+    color: rgb(0, 255, 42);
+}
+
+.art .container {
+    display: flex;
+    flex-wrap: nowrap;
+    width: 90%;
+    margin: 2% 5%;
+}
+
+.art .img {
+    display: block;
+    margin-top: 20vh;
+    width: 60%;
+    border: 1px solid black;
+    background: linear-gradient(red, black, white, green);
+    padding: 30px;
+    border-radius: 100%;
+}
+
+.art .artist {
+    width: 30%;
+    margin-right: 100px;
+    color: rgb(0, 255, 42);
+}
+
+.art table {
+    width: 70%;
+    border-collapse: collapse;
+    background: linear-gradient(rgb(27, 27, 27), rgb(65, 63, 63));
+    color: rgb(146, 144, 144);
+    margin: 20px 0;
+}
+
+.art th {
+    color: rgb(255, 235, 235);
+}
+
+.art th,
+.art td {
+    border: 2px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+
+.art .button {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #9a03ff;
+    text-decoration: none;
+    background-color: #bdbdbd;
+    border-radius: 20px;
+    text-align: center;
+}
+
+.art .button:hover {
+    background: linear-gradient(red, black, white, green);
+    color: #020202;
+    text-shadow: -5px -5px 10px white;
+}
+
+/* Error Page */
+
+.error {
+    height: 86.6vh;
+    background-color: #f1f1f1;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 50px;
+}
+
+.error div {
+    margin-top: 20vh;
+}
+
+.error h1 {
+    color: rgb(68, 51, 226);
+    font-size: 50px;
+}
+
+.error p {
+    font-size: 20px;
+}
