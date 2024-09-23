@@ -121,10 +121,13 @@ func List(src string) []artists {
 
 func Artists() []artists {
 	var wg sync.WaitGroup
+	dataTypes := []string{"artists", "locations"}
 	result := make([]artists, 52)
 	for i := 0; i < len(result); i++ {
-		wg.Add(1)
-		go fetchAll(i+1, &wg, &result[i], "artists")
+		for _, c := range dataTypes {
+			wg.Add(1)
+			go fetchAll(i+1, &wg, &result[i], c)
+		}
 	}
 	wg.Wait()
 	return result
