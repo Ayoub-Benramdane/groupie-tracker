@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Groupie Tracker</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body class="art">
+    <div class="container">
+        <div class="artist">
+            <center>
+                <img src="{{.Image}}" class="img" alt="Artist Image">
+                <h1>{{.Name}}</h1>
+            </center>
+        </div>
+        <table>
+            <tr>
+                <th>Name</th>
+                <td>{{.Name}}</td>
+            </tr>
+            <tr>
+                <th>Members</th>
+                <td>{{range .Members}}{{.}}<br>{{end}}</td>
+            </tr>
+            <tr>
+                <th>Creation Date</th>
+                <td>{{.CreationDate}}</td>
+            </tr>
+            <tr>
+                <th>First Album</th>
+                <td>{{.FirstAlbum}}</td>
+            </tr>
+            <tr>
+                <th><a href="/geo/{{.ID}}">Locations</a></th>
+                <td>{{range .Location.Loca}}{{.}}<br>{{end}}</td>
+            </tr>
+            <tr>
+                <th>Concert Dates</th>
+                <td>{{range .Date.Dates}}{{.}}<br>{{end}}</td>
+            </tr>
+            <tr>
+                <th>Relations</th>
+                <td>
+                    {{range $key, $values := .Relation.DatesLocations}}
+                    {{$key}}:<br>
+                    {{range $values}}{{.}}<br>{{end}}
+                    <br>
+                    {{end}}
+                </td>
+            </tr>
+        </table>
+    </div>
+    <center><a href="/" class="button">Home Page</a></center>
+</body>
+
+</html>

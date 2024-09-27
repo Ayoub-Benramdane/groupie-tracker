@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Groupie Tracker</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body class="home">
+    <div class="title">
+        <h1>Groupie Tracker</h1>
+    </div>
+    <header>
+        <div class="search-box">
+            <form action="/filter" method="get">
+                <input type="search" list="search" class="search" name="search" placeholder="Search by location..."
+                    autocomplete="off" />
+                <datalist id="search">
+                    {{range .}}
+                    {{range .Location.Loca}}
+                    <option value="{{.}}">Location</option>
+                    {{end}}
+                    {{end}}
+                </datalist>
+                <br>
+                <center>
+                    <table>
+                        <tr>
+                            <th>
+                                <label for="creation">Career starting year: </label>
+                            </th>
+                            <td>
+                                <input type="range" name="creMin" min="1950" max="2020" value="1950" id="ran" oninput="this.nextElementSibling.value = this.value">
+                                <output class="range-value">1950</output>
+                            </td>
+                            <td>
+                                <input type="range" name="creMax" min="1950" max="2020" value="2020" id="ran" oninput="this.nextElementSibling.value = this.value">
+                                <output class="range-value">2020</output>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <label for="first_album">First album year: </label>
+                            </th>
+                            <td>
+                                <input type="range" name="fAlbMin" min="1950" max="2020" value="0" id="ran" oninput="this.nextElementSibling.value = this.value">
+                                <output class="range-value">1950</output>
+                            </td>
+                            <td>
+                                <input type="range" name="fAlbMax" min="1950" max="2020" value="2020" id="ran" oninput="this.nextElementSibling.value = this.value">
+                                <output class="range-value">2020</output>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <label>N Members: </label>
+                            </th>
+                            <td>
+                                <input type="checkbox" name="member[]" value="1">1
+                                <input type="checkbox" name="member[]" value="2">2
+                                <input type="checkbox" name="member[]" value="3">3
+                                <input type="checkbox" name="member[]" value="4">4
+                                <input type="checkbox" name="member[]" value="5">5
+                                <input type="checkbox" name="member[]" value="6">6
+                                <input type="checkbox" name="member[]" value="7">7
+                                <input type="checkbox" name="member[]" value="8">8
+                            </td>
+                        </tr>
+                    </table>
+                </center>
+                <button type="submit" id="bs">Search</button>
+            </form>
+        </div>
+    </header>
+    <div class="container">
+        {{range .}}
+        <a href="/artists/{{.ID}}" class="card">
+            <img src="{{.Image}}" alt="Image of {{.Name}}">
+            <div>
+                <table>
+                    <tr>
+                        <td>Name:</td>
+                        <td>{{.Name}}</td>
+                    </tr>
+                    <tr>
+                        <td>Members:</td>
+                        <td>
+                            <ul>
+                                {{range .Members}}
+                                <li>{{.}}</li>
+                                {{end}}
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Creation Date:</td>
+                        <td>{{.CreationDate}}</td>
+                    </tr>
+                    <tr>
+                        <td>First Album:</td>
+                        <td>{{.FirstAlbum}}</td>
+                    </tr>
+                </table>
+            </div>
+        </a>
+        {{end}}
+    </div>
+</body>
+
+</html>
