@@ -1,6 +1,7 @@
 package Tracker
 
 import (
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"net/http"
@@ -64,29 +65,13 @@ func Filter(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func Geo(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		http.Error(w, "Status Method Not Allowed 405", http.StatusMethodNotAllowed)
-		return
-	}
-	temp, err := template.ParseFiles("src/geo.html")
+func jsonFunc(v interface{}) template.JS {
+	b, err := json.Marshal(v)
 	if err != nil {
-		http.Error(w, "Status Internal Server Error 500", http.StatusInternalServerError)
-		return
+		// Return an empty JSON array in case of error
+		return template.JS("[][]")
 	}
-	id, err := strconv.Atoi(r.PathValue("id"))
-	if err != nil {
-		temp, err := template.ParseFiles("src/Error.html")
-		if err != nil {
-			http.Error(w, "Status Internal Server Error 500", http.StatusInternalServerError)
-			return
-		}
-		w.WriteHeader(404)
-		temp.Execute(w, nil)
-		return
-	}
-	fmt.Println(id)
-	temp.Execute(w, nil)
+	return template.JS(b)
 }
 
 func Groupie(w http.ResponseWriter, r *http.Request) {
@@ -94,8 +79,9 @@ func Groupie(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Status Method Not Allowed 405", http.StatusMethodNotAllowed)
 		return
 	}
-	temp, err := template.ParseFiles("src/artist.html")
+	temp, err := template.New("artist.html").Funcs(template.FuncMap{"json": jsonFunc}).ParseFiles("src/artist.html")
 	if err != nil {
+		fmt.Println("Error parsing template:", err)
 		http.Error(w, "Status Internal Server Error 500", http.StatusInternalServerError)
 		return
 	}
@@ -104,13 +90,30 @@ func Groupie(w http.ResponseWriter, r *http.Request) {
 		temp, err := template.ParseFiles("src/Error.html")
 		if err != nil {
 			http.Error(w, "Status Internal Server Error 500", http.StatusInternalServerError)
+			fmt.Println("errrrrr222222")
 			return
 		}
 		w.WriteHeader(404)
 		temp.Execute(w, nil)
 		return
 	}
-	temp.Execute(w, Artist(id))
+	coord, errcoord := Address(Artist(id).Location.Loca)
+	if errcoord != nil {
+		http.Error(w, "Status Internal Server Error 500", http.StatusInternalServerError)
+		fmt.Println("rrrrrrrrrrr")
+		return
+	}
+
+	artist := Artist(id)
+
+	artist.Coordinates = coord
+
+	errtemp := temp.Execute(w, artist)
+
+	if errtemp != nil {
+		http.Error(w, "Status Internal Server Error 500", http.StatusInternalServerError)
+		return
+	}
 }
 
 func Stylise(w http.ResponseWriter, r *http.Request) {

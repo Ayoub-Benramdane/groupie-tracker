@@ -1,5 +1,7 @@
 /* Home Page */
 
+
+
 .home {
     margin: 0;
     padding: 0;
@@ -85,7 +87,7 @@
     padding: 15px;
     font-size: 16px;
     border: 2px solid #ccc;
-    border-radius: 20px ;
+    border-radius: 20px;
     background-color: #2E3131;
     color: #333;
 }
@@ -121,9 +123,11 @@
     .home .search {
         width: 200px;
     }
+
     .home #bs {
         width: 60px;
     }
+
     .home .title {
         font-size: 10px;
         height: 50px;
@@ -131,6 +135,30 @@
 }
 
 /* Artist Page */
+
+#map-container {
+    position: relative;
+    width: 800px;
+    height: 800px;
+    background: url('https://upload.wikimedia.org/wikipedia/commons/8/80/World_map_-_low_resolution.svg') no-repeat center;
+    background-size: cover;
+}
+
+#map {
+    height: 800px;
+    width: 100%;
+    margin-top: 20px;
+    display: none;
+}
+
+.marker {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: red;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+}
 
 .art {
     margin: 0;

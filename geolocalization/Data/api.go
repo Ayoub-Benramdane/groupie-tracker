@@ -3,11 +3,27 @@ package Tracker
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
+	"net/url"
 	"strconv"
 	"strings"
 	"sync"
 )
+
+type Coord struct {
+	Latitude  string `json:"lat"`
+	Longitude string `json:"lon"`
+	Type      string `json:"addresstype"`
+	FullDisp  string `json:"display_name"`
+	Name      string
+}
+
+type Country struct {
+	Name struct {
+		Long string `json:"common"`
+	} `json:"name"`
+}
 
 type dates struct {
 	ID    int      `json:"id"`
@@ -34,6 +50,7 @@ type artists struct {
 	Date         dates
 	Location     loca
 	Relation     rela
+	Coordinates  [][]Coord
 }
 
 func fetchAll(id int, wg *sync.WaitGroup, result *artists, fetch string) {
@@ -77,6 +94,91 @@ func fetchAll(id int, wg *sync.WaitGroup, result *artists, fetch string) {
 			result.Date = date
 		}
 	}
+}
+
+func GetCountry(short string) (string, error) {
+	short = strings.ToUpper(short) // Ensure uppercase
+	url := fmt.Sprintf("https://restcountries.com/v3.1/alpha/%s", short)
+
+	res, err := http.Get(url)
+	if err != nil {
+		return "", err
+	}
+	defer res.Body.Close()
+
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		return "", err
+	}
+	var countries []Country
+	err = json.Unmarshal(body, &countries)
+	if err != nil || len(countries) == 0 {
+		return "", fmt.Errorf("invalid country code")
+	}
+
+	return countries[0].Name.Long, nil
+}
+
+func Address(addresses []string) ([][]Coord, error) {
+	var results [][]Coord
+
+	for _, address := range addresses {
+		encodedAddress := url.QueryEscape(address)
+		addr := strings.Split(encodedAddress, "-")
+		apiURL := fmt.Sprintf("https://nominatim.openstreetmap.org/search?format=json&q=%s", addr[0])
+
+		resp, err := http.Get(apiURL)
+		if err != nil {
+			fmt.Printf("Failed to get address %s: %v\n", address, err)
+			continue
+		}
+		defer resp.Body.Close()
+
+		if resp.StatusCode != http.StatusOK {
+			fmt.Printf("Error fetching %s: %s\n", address, resp.Status)
+			continue
+		}
+
+		var res []Coord
+		err = json.NewDecoder(resp.Body).Decode(&res)
+		if err != nil {
+			fmt.Printf("Error decoding response for %s: %v\n", address, err)
+			continue
+		}
+		for i := 0; i < len(res); i++ {
+			a := res[i].FullDisp
+
+			country, err := GetCountry(addr[1])
+			if len(addr[1]) == 3 {
+				if err != nil {
+					fmt.Println("Error: Invalid country adress")
+					continue
+				}
+			} else {
+				country = addr[1]
+			}
+			if !(strings.Contains(a, country) || ValidAddr(res[i].Type)) {
+				res = append(res[:i], res[i+1:]...)
+				i--
+			}
+		}
+		res[0].Name = addr[0] + ", " + addr[1]
+		if len(res) == 0 {
+			fmt.Printf("No results found for address: %s\n", address)
+			continue
+		}
+
+		results = append(results, res)
+	}
+
+	if len(results) == 0 {
+		return nil, fmt.Errorf("no valid results found")
+	}
+	return results, nil
+}
+
+func ValidAddr(addr string) bool {
+	return addr == "state" || addr == "city" || addr == "province" || addr == "railway"
 }
 
 func Artist(id int) artists {

@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <title>Groupie Tracker</title>
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 
 <body class="art">
@@ -33,8 +35,12 @@
                 <td>{{.FirstAlbum}}</td>
             </tr>
             <tr>
-                <th><a href="/geo/{{.ID}}">Locations</a></th>
-                <td>{{range .Location.Loca}}{{.}}<br>{{end}}</td>
+                <th>Locations</th>
+                <td>
+                    {{range .Location.Loca}}{{.}}<br>{{end}}
+                    <br>
+                    <button id="map-button" onclick="showMap()">Show Map</button>
+                </td>
             </tr>
             <tr>
                 <th>Concert Dates</th>
@@ -44,15 +50,65 @@
                 <th>Relations</th>
                 <td>
                     {{range $key, $values := .Relation.DatesLocations}}
-                    {{$key}}:<br>
+                    <strong>{{$key}}:</strong><br>
                     {{range $values}}{{.}}<br>{{end}}
                     <br>
                     {{end}}
                 </td>
             </tr>
         </table>
+        <div id="map"></div>
     </div>
     <center><a href="/" class="button">Home Page</a></center>
+
+    <script>
+        function showMap() {
+            var mapElement = document.getElementById("map");
+            var button = document.getElementById("map-button")
+            if (mapElement.style.display === "block") {
+                button.innerText= "show map"
+                mapElement.style.display = "none"
+                return;
+            } 
+        
+            mapElement.style.display = "block"
+            button.innerText= "hide map"
+
+            var map = L.map('map').setView([0, 0], 2)
+        
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+        
+            var coordinates = {{.Coordinates}}
+           // console.log("Coordinates from backend:", coordinates) 
+        
+            if (!coordinates || coordinates.length === 0) {
+                alert("No coordinates available")
+                return;
+            }
+    
+            var bounds = [];
+            coordinates.forEach(function(coord) {
+                var lat = parseFloat(coord[0].lat)
+                var lon = parseFloat(coord[0].lon) 
+               
+                //console.log("Lat:", lat, "Lon:", lon)
+                
+                if (!isNaN(lat) && !isNaN(lon)) {
+                    var marker = L.marker([lat, lon]).addTo(map)
+                        .bindPopup(coord[0].Name)
+                    bounds.push([lat, lon])
+                }
+            });
+
+            if (bounds.length > 0) {
+                map.fitBounds(bounds, { padding: [50, 50] })
+            }
+        }
+    </script>
+    
+
 </body>
 
 </html>
